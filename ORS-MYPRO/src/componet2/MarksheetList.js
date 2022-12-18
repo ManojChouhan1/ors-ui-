@@ -1,3 +1,5 @@
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { Component } from 'react'
 import { Table } from 'react-bootstrap';
@@ -79,11 +81,8 @@ export default class MarksheetList extends Component {
                     <td>{item.chemistry}</td>
                     <td>{item.maths}</td>
                     <td>
-                      <Link to={'/addmark/' + item.id}>Edit</Link>
-                    </td>
-                    <td>
-                      <button onClick={() => this.delete(item.id)}>Delete</button>
-                    </td>
+                      <Link to={'/addmark/' + item.id}><FontAwesomeIcon icon={faEdit} style={{color: "blue",fontSize:"25px"}} /></Link></td>
+                    <td><button type='button' onClick={() => this.delete(item.id)}><FontAwesomeIcon icon={faTrash} style={{color: "red"}} /></button></td>
                   </tr>
                 )
               })

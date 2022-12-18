@@ -3,70 +3,78 @@ import React, { Component } from "react";
 // import * as ReactDOM from 'react-dom';
 import ReactDOM from "react-dom/client";
 import { Link } from "react-router-dom";
-// import { createRoot } from "react-dom/client";
 import Dashboard from "./Dashboard";
 export default class Login extends Component {
   constructor() {
     super();
     this.state = {
       loginId: "",
-      password: ""
+      password: "",
+      message: '',
+      "inputerror": {
+        "password": "",
+        "loginId": ""
+      }
     };
   }
-  valid() {
-    if (this.state.loginId === '' && this.state.password === "") {
-      this.setState({ data: "Enter id & password" })
-    } else if (this.state.loginId === '') {
-      this.setState({ data: "Enter LoginId " })
-    } else if (this.state.password === '') {
-      this.setState({ data: "Enter Password " })
-    } else { return true }
-  }
-
-
   submit(event) {
     event.preventDefault();
-    if (this.valid()) {
-      this.setState({ data: "" })
-      const url = "http://api.sunilos.com:9080/ORSP10/Auth/login"
-      axios.post(url, this.state).then((response) => {
-        console.log(response.data)
-        if (response.data.success) {
+    this.setState({
+      data: "", loginId: "", password: "", message: '',
+      "inputerror": {
+        "password": "", "loginId": ""
+      }
+    })
 
-          localStorage.setItem("Name", response.data.result.data.name)
-          // alert("form has been submitted");
-          // first way
-          // return ReactDOM.render(
-          //   <React.StrictMode>
-          //     <Dashboard/>
-          //   </React.StrictMode>,
-          //   document.getElementById("root")
-          // );
+    const url = "http://api.sunilos.com:9080/ORSP10/Auth/login"
+    axios.post(url, this.state).then((response) => {
+      console.log(response.data)
+      if (response.data.result.inputerror) {
+        this.setState({ inputerror: response.data.result.inputerror })
+      } else if (response.data.result.message) {
+        this.setState({ message: response.data.result.message })
+      }
+      else if (response.data.success) {
+        localStorage.setItem("Name", response.data.result.data.name)
+        // alert("form has been submitted");
+        // first way
+        // return ReactDOM.render(
+        //   <React.StrictMode>
+        //     <Dashboard/>
+        //   </React.StrictMode>,
+        //   document.getElementById("root")
+        // );
 
-          //Second way
+        //Second way
+
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(
+          <React.StrictMode>
+            <Dashboard />
+          </React.StrictMode>
+        );
 
 
-          const root = ReactDOM.createRoot(document.getElementById("root"));
-          root.render(
-            <React.StrictMode>
-              <Dashboard />
-            </React.StrictMode>
-          );
+      } else { this.setState({ data: "Ab kya hai bhai" }) }
+    })
 
-
-          // third way
-          // const root = createRoot("root");
-          // root.render( <Dashboard />);
-
-
-        } else { this.setState({ data: "Invalid ID or Password" }) }
-      })
-    }
+  }
+  reset() {
+    this.setState({
+      loginId: "",
+      password: "",
+      data: "",
+      message: '',
+      "inputerror": {
+        "password": "",
+        "loginId": ""
+      }
+    })
   }
 
   render() {
     return (
-      <div className="container" style={{ marginTop: '80px', width: "30%", border: "1px solid gray", padding: "30px",borderRadius:"50px" }}>
+      <div className="container" style={{ marginTop: '80px', width: "30%", border: "1px solid gray", padding: "30px", borderRadius: "50px" }}>
         <h1 className="text-uppercase text-center mb-5">LOGIN FORM</h1>
         <form >
           <div className="form-group">
@@ -83,6 +91,8 @@ export default class Login extends Component {
               name="loginId"
               value={this.state.loginId}
             />
+            <p style={{ color: "red", margin: "10px" }}>{this.state.inputerror.loginId}</p>
+
           </div>&nbsp;
           <div className="form-group">
             <label htmlFor="exampleInputPassword1">Password</label>
@@ -97,19 +107,42 @@ export default class Login extends Component {
               name="password"
               value={this.state.password}
             />
+            <p style={{ color: "red", margin: "10px" }}>{this.state.inputerror.password}</p>
+
           </div>
-          <h3 style={{ color: "red", margin: "10px" }}>{this.state.data}</h3>
+          <h3 style={{ color: "red", margin: "10px" }}>{this.state.message}</h3>
+          <h3 style={{ color: "green", margin: "10px" }}>{this.state.data}</h3>
+
+          <div className='row pt-3'>
+            <div className='col-md-6 d-flex justify-content-center align-items-center'>
+              <button
+                type="btn"
+                className="btn btn-success btn-block btn-lg gradient-custom-4 text-body "
+                onClick={(event) => { this.submit(event) }}
+              >
+                Submit
+              </button>
+            </div>
+            <div className='col-md-6 d-flex justify-content-center align-items-center'>
+              <button
+                type="reset"
+                className="btn btn-primary btn-block btn-lg gradient-custom-4 text-body "
+                onClick={() => { this.reset() }}
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+
           &nbsp;
-          <div className="d-flex justify-content-center mt-1">
+          {/* <div className="d-flex justify-content-center mt-1">
             <button
               type="submit"
               onClick={(event) => this.submit(event)}
               className="btn btn-primary"
             >Submit
             </button>
-          </div>
-
-
+          </div> */}
           <p className="text-center text-muted mt-5 mb-0">
             You have no an account?{" "}
             <Link to="/registration" className="fw-bold text-body">

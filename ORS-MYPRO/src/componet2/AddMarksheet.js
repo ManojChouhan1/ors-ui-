@@ -15,7 +15,15 @@ class AddMarksheet extends Component {
       chemistry: "",
       maths: "",
       data: "",
-      toggle: false
+      toggle: false,
+      nameerror: "",
+      inputerror: {
+        "studentId": "",
+        "chemistry": "",
+        "maths": "",
+        "physics": "",
+        "rollNo": ""
+      }
     }
 
     if (this.props.params.id) {
@@ -47,67 +55,74 @@ class AddMarksheet extends Component {
       chemistry: "",
       maths: "",
       data: "",
-      toggle: false
+      toggle: false,
+      nameerror: "",
+      inputerror: {
+        "studentId": "",
+        "chemistry": "",
+        "maths": "",
+        "physics": "",
+        "rollNo": ""
+
+      }
     })
   }
-  valid() {
-    if (this.state.name === "" && this.state.rollNo === "" && this.state.studentId === "" && this.state.physics === "" && this.state.chemistry === "" && this.state.maths === "") {
-      this.setState({ data: "Enter Correct Data!!!" })
-    } else if (this.state.name === "") {
-      this.setState({ data: "Enter full name!!!" })
-    } else if (this.state.rollNo === "") {
-      this.setState({ data: "Enter Roll!!!" })
-    } else if (this.state.studentId === "") {
-      this.setState({ data: "Enter Student id!!!" })
-    } else if (this.state.physics === "") {
-      this.setState({ data: "Enter Physics marks!!!" })
-    } else if (this.state.chemistry === "") {
-      this.setState({ data: "Enter Chemistry marks!!!" })
-    } else if (this.state.maths === "") {
-      this.setState({ data: "Enter Mathemetics!!!" })
-    } else if (this.state.toggle) {
-      // toggele
+  valid(event){
+    event.preventDefault();
+    if(this.state.toggle){
       this.setState({ data: "loginId already exists" })
-    } else {
-      return true
-    }
+    }else{return true}
   }
   submit(event) {
+     if(this.valid(event)){
     event.preventDefault();
-    this.setState({ data: '' })
-    if (this.valid()) {
-      const url = "http://api.sunilos.com:9080/ORSP10/Marksheet/save";
-      axios.post(url, this.state).then((response) => {
-        this.setState({ list: response.data.result })
-        console.log(response.data)
+    this.setState({
+      nameerror: "", data: "",
+      inputerror: { "studentId": "", "chemistry": "", "maths": "", "physics": "", "rollNo": "" }
+    })
+    const url = "http://api.sunilos.com:9080/ORSP10/Marksheet/save";
+    axios.post(url, this.state).then((response) => {
+      this.setState({ list: response.data.result })
+      // console.log(response.data.inputerror)
 
-        if (response.data.success === true) {
-          alert("Success")
-          this.setState({ data: " Success", toggle: true })
-        }
-      })
+      if (response.data.result.inputerror && this.state.name === "") {
+        this.setState({ inputerror: response.data.result.inputerror, nameerror: "must not be empty" })
+        // } else if (this.state.name === "") {
+        //   this.setState({ nameerror: "must not be empty" })
+      } else if (response.data.result.inputerror) {
+        this.setState({ inputerror: response.data.result.inputerror })
+      }  else if (response.data.success === true) {
+        this.setState({ data: " Success", toggle: true })
+      } else {
+        this.setState({ data: " Already exists" })
+
+      }
+
+
+    })
     }
 
   }
   render() {
     // console.log(this.props)
     return (
-      <div>
+      <div >
 
         <section
           className="vh-100 bg-image"
         // style={{backgroundImage: url(require("../image/home.jpg"))}}
         >
-          <div className="mask d-flex align-items-center h-50 gradient-custom-3">
+          <div className="mask d-flex align-items-center h-50 gradient-custom-3" style={{ marginBottom: "200px" }}>
             <div className="container h-50">
               <div className="row d-flex justify-content-center align-items-center h-50">
                 <div className="col-12 col-md-9 col-lg-7 col-xl-6">
-                  <div className="card" style={{ borderRadius: '30px', marginBottom: "100px", width: "80%" }}>
+                  <div className="card 1rem!important" style={{ borderRadius: '30px', marginBottom: "150px", width: "80%" }}>
                     <h3 style={{ textAlign: 'center' }} >
                       {
                         this.props.params.id ? "EDIT MARKSHEET" : "ADD MARKSHEET"
                       }
                     </h3>
+                    <div style={{ color: "green" }}> <h6>{this.state.data}</h6></div>
                     <div className="card-body p-5">
                       <form >
                         <div className="form-outline mb-2">
@@ -128,6 +143,8 @@ class AddMarksheet extends Component {
                           />
 
                         </div>
+                        <div style={{ color: "red" }}> <h6>{this.state.nameerror}</h6></div>
+
                         <div className="form-outline mb-2">
                           <label
                             className="form-label"
@@ -146,6 +163,7 @@ class AddMarksheet extends Component {
                           />
 
                         </div>
+                        <div style={{ color: "red" }}> <h6>{this.state.inputerror.rollNo}</h6></div>
 
                         <div className="form-outline mb-2">
                           <label
@@ -165,6 +183,7 @@ class AddMarksheet extends Component {
                           />
 
                         </div>
+                        <div style={{ color: "red" }}> <h6>{this.state.inputerror.studentId}</h6></div>
 
                         <div className="form-outline mb-2">
                           <label
@@ -184,6 +203,7 @@ class AddMarksheet extends Component {
                           />
 
                         </div>
+                        <div style={{ color: "red" }}> <h6>{this.state.inputerror.physics}</h6></div>
 
                         <div className="form-outline mb-2">
                           <label
@@ -203,6 +223,8 @@ class AddMarksheet extends Component {
                           />
 
                         </div>
+                        <div style={{ color: "red" }}> <h6>{this.state.inputerror.chemistry}</h6></div>
+
 
                         <div className="form-outline mb-2 ">
                           <label
@@ -220,9 +242,10 @@ class AddMarksheet extends Component {
                             value={this.state.maths}
                             placeholder="Enter maths mark"
                           />
-
                         </div>
-                        <div style={{ color: "red" }}> <h6>{this.state.data}</h6></div>
+                        <div style={{ color: "red" }}> <h6>{this.state.inputerror.maths}</h6></div>
+
+                        <div style={{ color: "green" }}> <h6>{this.state.data}</h6></div>
                         <div className='row pt-3'>
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>
                             <button

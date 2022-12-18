@@ -14,7 +14,14 @@ class AddStudent extends Component {
       "email": "",
       "id": "",
       "data": "",
-      "toggle": false
+      "toggle": false,
+      inputerror: {
+        "firstName": "",
+        "lastName": "",
+        "collegeId": "",
+        "mobileNo": "",
+        "email": ""
+      }
     }
     if (this.props.params.id) {
       this.get();
@@ -42,37 +49,40 @@ class AddStudent extends Component {
       "mobileNo": "",
       "email": "",
       "data": "",
-      "toggle": false
+      "toggle": false,
+      inputerror: {
+        "firstName": "",
+        "lastName": "",
+        "collegeId": "",
+        "mobileNo": "",
+        "email": ""
+      }
     })
   }
   valid() {
-    if (this.state.firstName === "" && this.state.lastName === "" && this.state.mobileNo === "" && this.state.collegeId === "" && this.state.email === "") {
-      this.setState({ data: "Please Enter information of student" })
-    } else if (this.state.firstName === "") {
-      this.setState({ data: "Enter First Name" })
-    } else if (this.state.lastName === "") {
-      this.setState({ data: "Enter Last Name" })
-    } else if (this.state.mobileNo === "") {
-      this.setState({ data: "Enter mobile number" })
-    } else if (this.state.collegeId === "") {
-      this.setState({ data: "Enter College id" })
-    } else if (this.state.email === "") {
-      this.setState({ data: "Enter Correct email id" })
-    } else if (this.state.toggle) {
-      this.setState({ data: "StudentInfo Already Exist" })
+    if (this.state.toggle) {
+      this.setState({ data: "StudentInfo Already exists" })
     } else { return true }
   }
   submit(event) {
     event.preventDefault();
-    this.setState({ data: "" })
+    this.setState({
+      data: "",
+      inputerror: {
+        "firstName": "", "lastName": "", "collegeId": "", "mobileNo": "", "email": ""
+      }
+    })
     if (this.valid()) {
       const url = "http://api.sunilos.com:9080/ORSP10/Student/save";
       axios.post(url, this.state).then((response) => {
         console.log(response.data.success)
-        if (!response.data.success) {
+        if(response.data.result.inputerror){
+          this.setState({inputerror : response.data.result.inputerror})
+        }
+        else if(!response.data.success) {
           this.setState({ data: "Enter correct mobileNo./Email" })
         } else if (response.data.success) {
-          this.setState({ data: "Mission success", toggle: true })
+          this.setState({ data: " success", toggle: true })
         }
       })
     }
@@ -89,7 +99,7 @@ class AddStudent extends Component {
             <div className="container h-50">
               <div className="row d-flex justify-content-center align-items-center h-50">
                 <div className="col-12 col-md-9 col-lg-7 col-xl-6">
-                  <div className="card" style={{ borderRadius: '30px',marginBottom:"100px",width:"70%" }}>
+                  <div className="card" style={{ borderRadius: '30px', marginBottom: "100px", width: "70%" }}>
                     <h3 className=" d-flex justify-content-center align-items-center">
                       {
                         this.props.params.id ? "EDIT STUDENTS" : "ADD STUDENTS"
@@ -100,7 +110,7 @@ class AddStudent extends Component {
 
                       <form >
                         <div className="form-outline mb-3">
-                        <label
+                          <label
                             className="form-label"
                             htmlFor="form3Example1cg"
                           >
@@ -114,10 +124,11 @@ class AddStudent extends Component {
                             name='firstName'
                             value={this.state.firstName}
                           />
-                          
+                        <div style={{ color: "red" }}><p>{this.state.inputerror.firstName}</p></div>
+
                         </div>
                         <div className="form-outline mb-3">
-                        <label
+                          <label
                             className="form-label"
                             htmlFor="form3Example2cg"
                           >
@@ -131,11 +142,12 @@ class AddStudent extends Component {
                             name='lastName'
                             value={this.state.lastName}
                           />
-                          
+                        <div style={{ color: "red" }}><p>{this.state.inputerror.lastName}</p></div>
+
                         </div>
 
                         <div className="form-outline mb-3">
-                        <label
+                          <label
                             className="form-label"
                             htmlFor="form3Example3cg"
                           >
@@ -150,11 +162,12 @@ class AddStudent extends Component {
                             value={this.state.collegeId}
 
                           />
-                          
+                        <div style={{ color: "red" }}><p>{this.state.inputerror.collegeId}</p></div>
+
                         </div>
 
                         <div className="form-outline mb-3">
-                        <label
+                          <label
                             className="form-label"
                             htmlFor="form3Example4cg"
                           >
@@ -168,11 +181,12 @@ class AddStudent extends Component {
                             name="mobileNo"
                             value={this.state.mobileNo}
                           />
-                          
+                        <div style={{ color: "red" }}><p>{this.state.inputerror.mobileNo}</p></div>
+
                         </div>
 
                         <div className="form-outline mb-2">
-                        <label
+                          <label
                             className="form-label"
                             htmlFor="form3Example4cg"
                           >
@@ -186,9 +200,10 @@ class AddStudent extends Component {
                             name="email"
                             value={this.state.email}
                           />
-                          
+                        <div style={{ color: "red" }}><p>{this.state.inputerror.email}</p></div>
+
                         </div>
-                        <div style={{ color: "red" }}><p>{this.state.data}</p></div>
+                        <div style={{ color: "green" }}><p>{this.state.data}</p></div>
                         <div className='row pt-3'>
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>
                             <button

@@ -12,7 +12,14 @@ export default class Registration extends Component {
       "password": '',
       "roleId": '',
       "data": "",
-      "agree": true
+      epassword:'',
+      "agree": true,
+      "inputerror": {
+        "lastName": "",
+        "firstName": "",
+        "loginId": "",
+        "roleId": ""
+      }
     }
   }
   reset() {
@@ -23,45 +30,51 @@ export default class Registration extends Component {
       "password": '',
       "roleId": '',
       "data": "",
-      "agree": true
+      "agree": true,
+      epassword:'',
+      "inputerror": {
+        "lastName": "",
+        "firstName": "",
+        "loginId": "",
+        "roleId": ""
+      }
 
     })
-  }
-  valid() {
-    if (this.state.firstName === '' && this.state.lastName === '' && this.state.loginId === '' && this.state.password === '' && this.state.roleId === '') {
-      this.setState({ data: " Please fill your corret info..." })
-    } else if (this.state.firstName === '') {
-      this.setState({ data: "Enter firstName" })
-    } else if (this.state.lastName === '') {
-      this.setState({ data: "Enter lastName" })
-    } else if (this.state.loginId === '') {
-      this.setState({ data: "Enter loginId" })
-    } else if (this.state.password === '') {
-      this.setState({ data: "Enter Password" })
-    } else if (this.state.roleId === '') {
-      this.setState({ data: "Enter Role id" })
-    } else { return true }
   }
 
   register(event) {
     event.preventDefault();
-    this.setState({ data: '' })
+    this.setState({
+      data: '',
+      epassword:'',
+      
+      "inputerror": {
+        "lastName": "",
+        "firstName": "",
+        "loginId": "",
+        "roleId": ""
+      }
+    })
 
-    if (this.valid()) {
-      const url = "http://api.sunilos.com:9080/ORSP10/User/save"
-      axios.post(url, this.state).then((response) => {
-        console.log(response)
-        if (response.data.result.message === "loginId already exists") {
-          this.setState({ data: "loginId already exists" })
-        } else if (response.data.success === true) {
-          // alert("Form has been submitted")}
-          this.setState({ data: "Registration Success" })
-        } else {
-          this.setState({ data: "Role id incorrect" })
+    const url = "http://api.sunilos.com:9080/ORSP10/User/save"
+    axios.post(url, this.state).then((response) => {
+      console.log(response.data)
+      if (response.data.result.inputerror && this.state.password==='') {
+        this.setState({ inputerror : response.data.result.inputerror, epassword : "must not be empty" })
+      } if (response.data.result.inputerror ) {
+        this.setState({ inputerror : response.data.result.inputerror })
+      }if (this.state.password==='') {
+        this.setState({  epassword : "must not be empty" })
+      } else if (response.data.result.message === "loginId already exists") {
+        this.setState({ data: "loginId already exists" })
+      } else if (response.data.success) {
+        this.setState({ data: "Registration Success" })
+      } else {
+        this.setState({ data: "Role id incorrect" })
 
-        }
-      })
-    }
+      }
+    })
+   
   }
   render() {
     return (
@@ -94,6 +107,7 @@ export default class Registration extends Component {
                             onChange={(event) => { this.setState({ firstName: event.target.value }) }}
                             placeholder="Enter first name"
                           />
+                        <p style={{ color: 'red' }}>{this.state.inputerror.firstName}</p>
 
                         </div>
                         <div className="form-outline mb-1">
@@ -110,6 +124,7 @@ export default class Registration extends Component {
                             onChange={(event) => { this.setState({ lastName: event.target.value }) }}
                             placeholder="Enter last name"
                           />
+                        <p style={{ color: 'red' }}>{this.state.inputerror.lastName}</p>
 
                         </div>
 
@@ -128,6 +143,7 @@ export default class Registration extends Component {
                             name="loginId"
                             placeholder="Enter login id"
                           />
+                        <p style={{ color: 'red' }}>{this.state.inputerror.loginId}</p>
 
                         </div>
 
@@ -146,6 +162,7 @@ export default class Registration extends Component {
                             name="password"
                             placeholder="Enter password"
                           />
+                        <p style={{ color: 'red' }}>{this.state.epassword}</p>
 
                         </div>
 
@@ -163,10 +180,11 @@ export default class Registration extends Component {
                             onChange={(event) => { this.setState({ roleId: event.target.value }) }}
                             placeholder="Enter roll id"
                           />
-
+                        <p style={{ color: 'red' }}>{this.state.inputerror.roleId}</p>
+                          
                         </div>
 
-                        <p style={{ color: 'red' }}>{this.state.data}</p>
+                        <p style={{ color: 'green' }}>{this.state.data}</p>
 
                         <div className="form-check d-flex justify-content-center mb-2">
                           <input

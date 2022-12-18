@@ -11,7 +11,14 @@ class AddCollege extends Component {
       "city": "",
       "name": "",
       "state": "",
-      "phoneNo": ""
+      "phoneNo": "",
+      inputerror: {
+        "address": "",
+        "city": "",
+        "name": "",
+        "state": "",
+        "phoneNo": ""
+      }
     }
     if (this.props.params.id) {
       this.get();
@@ -37,41 +44,39 @@ class AddCollege extends Component {
       "city": "",
       "name": "",
       "state": "",
-      "phoneNo": ""
+      "phoneNo": "",
+      "data": "",
+      inputerror: {
+        "address": "",
+        "city": "",
+        "name": "",
+        "state": "",
+        "phoneNo": ""
+      }
     })
   }
-  valid() {
-    if (this.state.address === "" && this.state.name === "" && this.state.state === "" && this.state.phoneNo === "" && this.state.city === "") {
-      this.setState({ data: "Enter correct college Data" })
-    } else if (this.state.address === "") {
-      this.setState({ data: "Enter college Address" })
-    } else if (this.state.name === "") {
-      this.setState({ data: "Enter college Name" })
-    } else if (this.state.state === "") {
-      this.setState({ data: "Enter college State" })
-    } else if (this.state.phoneNo === "") {
-      this.setState({ data: "Enter Contact number" })
-    } else if (this.state.city === "") {
-      this.setState({ data: "Enter college City" })
-    } else { return true }
-  }
+
   submit(event) {
     event.preventDefault();
-    if (this.valid()) {
-      const url = "http://api.sunilos.com:9080/ORSP10/College/save";
-      axios.post(url, this.state).then((response) => {
-        // console.log(response.data)
+    this.setState({
+      "data": "", inputerror: {
+        "address": "", "city": "", "name": "", "state": "", "phoneNo": ""
+      }
+    })
+    const url = "http://api.sunilos.com:9080/ORSP10/College/save";
+    axios.post(url, this.state).then((response) => {
+      // console.log(response.data)
 
-        this.setState({ list: response.data.result.data })
-        if (response.data.result.message === "name already exists") {
-          this.setState({ data: "College Name already exists" })
-        } else if (response.data.success) {
-          this.setState({ data: "Mission success" })
-        } else {
-          this.setState({ data: "Must be 10 Digit contact number" })
-        }
-      })
-    }
+      this.setState({ list: response.data.result.data })
+      if (response.data.result.inputerror) {
+        this.setState({ inputerror: response.data.result.inputerror })
+      } else if (response.data.success) {
+        this.setState({ data: " success" })
+      } else {
+        this.setState({ data: "Login id already exist" })
+      }
+    })
+
   }
   render() {
     // console.log(this.props)
@@ -111,6 +116,7 @@ class AddCollege extends Component {
                             name='name'
                             value={this.state.name}
                           />
+                          <h6 style={{ color: "red" }}>{this.state.inputerror.name}</h6>
 
                         </div>
                         <div className="form-outline mb-2">
@@ -128,6 +134,7 @@ class AddCollege extends Component {
                             name='phoneNo'
                             value={this.state.phoneNo}
                           />
+                          <h6 style={{ color: "red" }}>{this.state.inputerror.phoneNo}</h6>
 
                         </div>
 
@@ -147,6 +154,7 @@ class AddCollege extends Component {
                             value={this.state.address}
 
                           />
+                          <h6 style={{ color: "red" }}>{this.state.inputerror.address}</h6>
 
                         </div>
 
@@ -165,6 +173,7 @@ class AddCollege extends Component {
                             name="city"
                             value={this.state.city}
                           />
+                          <h6 style={{ color: "red" }}>{this.state.inputerror.city}</h6>
 
                         </div>
 
@@ -183,9 +192,10 @@ class AddCollege extends Component {
                             name="state"
                             value={this.state.state}
                           />
+                          <h6 style={{ color: "red" }}>{this.state.inputerror.state}</h6>
 
                         </div>
-                        <h6 style={{ color: "red" }}>{this.state.data}</h6>
+                        <h6 style={{ color: "green" }}>{this.state.data}</h6>
                         <div className='row pt-3'>
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>
                             <button

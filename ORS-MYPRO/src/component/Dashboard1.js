@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faKey, faLock, faUser } from '@fortawesome/free-solid-svg-icons'
+import {  faHome, faSignIn, faUser } from '@fortawesome/free-solid-svg-icons'
 
-export default class Navbar extends Component {
+export default class Dashboard1 extends Component {
   render() {
     return (
       <div>
@@ -23,7 +23,7 @@ export default class Navbar extends Component {
                   <Link className="nav-link active" aria-current="page" to="/registration"><FontAwesomeIcon icon={faUser} style={{ color: "blue" }} /> Registration</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link active" aria-current="page" to="/login"><FontAwesomeIcon icon={faLock} style={{ color: "blue" }}/><FontAwesomeIcon icon={faKey} style={{ color: "blue" }} /> Login </Link>
+                  <Link className="nav-link active" aria-current="page" to="/login"><FontAwesomeIcon icon={faSignIn} style={{ color: "blue" }}/> Login </Link>
                 </li>
               </ul>
 

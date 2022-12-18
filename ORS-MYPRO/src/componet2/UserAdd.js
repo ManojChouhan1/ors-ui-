@@ -17,6 +17,12 @@ class UserAdd extends Component {
       roleId: '',
       message: '',
       id: '',
+      inputerror: {
+        "firstName": "",
+        "lastName": "",
+        "loginId": "",
+        "roleId": ""
+      }
     }
     if (this.props.params.id) {
       this.get()
@@ -50,46 +56,39 @@ class UserAdd extends Component {
       roleId: '',
       message: '',
       data: '',
-      toggle: ''
+      toggle: '',
+      inputerror: {
+        "firstName": "",
+        "lastName": "",
+        "loginId": "",
+        "roleId": ""
+      }
     })
   }
-  valid() {
-    if (this.state.firstName === "" && this.state.lastName === "" && this.state.loginId === "" && this.state.password === "" && this.state.roleId === "") {
-      this.setState({ data: "Enter Your info...!!!" })
-    } else if (this.state.firstName === "") {
-      this.setState({ data: "Enter FirstName!!!" })
-    } else if (this.state.lastName === "") {
-      this.setState({ data: "Enter LastName!!!" })
-    } else if (this.state.loginId === "") {
-      this.setState({ data: "Enter email!!!" })
-    } else if (this.state.password === "") {
-      this.setState({ data: "Enter Password!!!" })
-    } else if (this.state.roleId === "") {
-      this.setState({ data: "Enter Role id!!!" })
-    } else {
-      return true
-    }
-  }
+  
   submit(event) {
     event.preventDefault();
-    this.setState({ data: '' })
-    if (this.valid()) {
+    this.setState({
+      data: '', inputerror: {
+        "firstName": "", "lastName": "", "loginId": "", "roleId": ""
+      }
+    })
 
-      let url = "http://api.sunilos.com:9080/ORSP10/User/save";
-      axios.post(url, this.state).then((response) => {
-        this.setState({ list: response.data.result })
-        // console.log(response.data.result)
+    let url = "http://api.sunilos.com:9080/ORSP10/User/save";
+    axios.post(url, this.state).then((response) => {
+      this.setState({ list: response.data.result })
+      console.log(response.data.result)
 
-        if (response.data.result.message === "loginId already exists") {
-          this.setState({ data: "loginId already exists" })
-        } else if (!response.data.success) {
-          this.setState({ data: "Please fill correct Role id" })
-        } else {
-          alert("Success")
-          this.setState({ data: "Mission success" })
-        }
-      })
-    }
+      if (response.data.result.inputerror) {
+        this.setState({ inputerror: response.data.result.inputerror })
+      }else if (response.data.result.message==="loginId already exists") {
+        this.setState({ data: "loginId already exists" })
+      }  else if (!response.data.success) {
+        this.setState({ data: "Role id incorrect" })
+      } else {
+        this.setState({ data: " success" })
+      }
+    })
   }
 
   render() {
@@ -128,6 +127,7 @@ class UserAdd extends Component {
                             value={this.state.firstName}
                             placeholder="Enter first name"
                           />
+                          <div style={{ color: "red" }}> <p>{this.state.inputerror.firstName}</p></div>
 
                         </div>
                         <div className="form-outline mb24">
@@ -147,6 +147,7 @@ class UserAdd extends Component {
                             required
                             placeholder="Enter last name"
                           />
+                          <div style={{ color: "red" }}> <p>{this.state.inputerror.lastName}</p></div>
 
                         </div>
 
@@ -167,7 +168,7 @@ class UserAdd extends Component {
                             required
                             placeholder="Enter email id"
                           />
-
+                          <div style={{ color: "red" }}> <p>{this.state.inputerror.loginId}</p></div>
 
                         </div>
 
@@ -207,8 +208,10 @@ class UserAdd extends Component {
                             value={this.state.roleId}
                             placeholder="Enter roll id"
                           />
+                          <div style={{ color: "red" }}> <p>{this.state.inputerror.roleId}</p></div>
+
                         </div>
-                        <div style={{ color: "red" }}> <p>{this.state.data}</p></div>
+                        <div style={{ color: "green" }}> <p>{this.state.data}</p></div>
                         <div className='row'>
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>
                             <button

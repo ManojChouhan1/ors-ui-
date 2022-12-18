@@ -1,3 +1,5 @@
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import React, { Component } from 'react'
 import { Table } from 'react-bootstrap'
@@ -48,7 +50,7 @@ export default class RollList extends Component {
           </span>
         </form>
         <hr />
-        <Table striped bordered hover>
+        <Table striped bordered hover style={{ marginBottom: '100px' }}>
           <thead>
             <tr>
               <th>#</th>
@@ -67,8 +69,8 @@ export default class RollList extends Component {
                     <td>{item.id}</td>
                     <td>{item.name}</td>
                     <td>{item.discription}</td>
-                    <td><Link to={"/addrole/" + item.id} >Edit</Link></td>
-                    <td><button onClick={() => this.delete(item.id)}>Delete</button></td>
+                    <td><Link to={"/addrole/" + item.id} ><FontAwesomeIcon icon={faEdit} style={{color: "blue",fontSize:"25px"}} /></Link></td>
+                    <td><button type='button' onClick={() => this.delete(item.id)}><FontAwesomeIcon icon={faTrash} style={{color: "red"}} /></button></td>
                   </tr>
                 )
               })
