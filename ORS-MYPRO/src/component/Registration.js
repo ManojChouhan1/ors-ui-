@@ -11,8 +11,7 @@ export default class Registration extends Component {
       "loginId": '',
       "password": '',
       "roleId": '',
-      "data": "",
-      epassword:'',
+      epassword: '',
       "agree": true,
       "inputerror": {
         "lastName": "",
@@ -29,25 +28,20 @@ export default class Registration extends Component {
       "loginId": '',
       "password": '',
       "roleId": '',
-      "data": "",
       "agree": true,
-      epassword:'',
+      epassword: '',
       "inputerror": {
         "lastName": "",
         "firstName": "",
         "loginId": "",
         "roleId": ""
       }
-
     })
   }
-
   register(event) {
     event.preventDefault();
     this.setState({
-      data: '',
-      epassword:'',
-      
+      epassword: '',
       "inputerror": {
         "lastName": "",
         "firstName": "",
@@ -55,39 +49,36 @@ export default class Registration extends Component {
         "roleId": ""
       }
     })
-
     const url = "http://api.sunilos.com:9080/ORSP10/User/save"
     axios.post(url, this.state).then((response) => {
-      console.log(response.data)
-      if (response.data.result.inputerror && this.state.password==='') {
-        this.setState({ inputerror : response.data.result.inputerror, epassword : "must not be empty" })
-      } if (response.data.result.inputerror ) {
-        this.setState({ inputerror : response.data.result.inputerror })
-      }if (this.state.password==='') {
-        this.setState({  epassword : "must not be empty" })
-      } else if (response.data.result.message === "loginId already exists") {
-        this.setState({ data: "loginId already exists" })
+      // console.log(response.data)
+      if (response.data.result.inputerror && this.state.password === '') {
+        this.setState({ inputerror: response.data.result.inputerror, epassword: "must not be empty" })
+      } else if (response.data.result.inputerror) {
+        this.setState({ inputerror: response.data.result.inputerror })
+      } else if (this.state.password === '') {
+        this.setState({ epassword: "must not be empty" })
+      } else if (response.data.result.message) {
+        this.props.showAlert(response.data.result.message, "info")
       } else if (response.data.success) {
-        this.setState({ data: "Registration Success" })
+        this.props.showAlert("Registration success", "success")
       } else {
-        this.setState({ data: "Role id incorrect" })
-
+        this.props.showAlert("Role id incorrect", "danger")
       }
     })
-   
   }
   render() {
     return (
       <div >
         <section
-          className="vh-100 bg-image"
+          className="vh-100 bg-image m-5"
         // style={{backgroundImage: url(require("../image/home.jpg"))}}
         >
           <div className="mask d-flex align-items-center h-50 gradient-custom-3">
             <div className="container h-50" style={{ width: "80%" }}>
               <div className="row d-flex justify-content-center align-items-center h-50">
                 <div className="col-12 col-md-9 col-lg-7 col-xl-6">
-                  <div className="card" style={{ borderRadius: '50px' }}>
+                  <div className="card" style={{ borderRadius: '50px', marginBottom: "200px" }}>
                     <div className="card-body ">
                       <h2 className="text-uppercase text-center mb-0">
                         Create an account
@@ -107,8 +98,7 @@ export default class Registration extends Component {
                             onChange={(event) => { this.setState({ firstName: event.target.value }) }}
                             placeholder="Enter first name"
                           />
-                        <p style={{ color: 'red' }}>{this.state.inputerror.firstName}</p>
-
+                          <p style={{ color: 'red' }}>{this.state.inputerror.firstName}</p>
                         </div>
                         <div className="form-outline mb-1">
                           <label
@@ -124,10 +114,8 @@ export default class Registration extends Component {
                             onChange={(event) => { this.setState({ lastName: event.target.value }) }}
                             placeholder="Enter last name"
                           />
-                        <p style={{ color: 'red' }}>{this.state.inputerror.lastName}</p>
-
+                          <p style={{ color: 'red' }}>{this.state.inputerror.lastName}</p>
                         </div>
-
                         <div className="form-outline mb-1">
                           <label
                             className="form-label"
@@ -143,10 +131,8 @@ export default class Registration extends Component {
                             name="loginId"
                             placeholder="Enter login id"
                           />
-                        <p style={{ color: 'red' }}>{this.state.inputerror.loginId}</p>
-
+                          <p style={{ color: 'red' }}>{this.state.inputerror.loginId}</p>
                         </div>
-
                         <div className="form-outline mb-1">
                           <label
                             className="form-label"
@@ -162,10 +148,8 @@ export default class Registration extends Component {
                             name="password"
                             placeholder="Enter password"
                           />
-                        <p style={{ color: 'red' }}>{this.state.epassword}</p>
-
+                          <p style={{ color: 'red' }}>{this.state.epassword}</p>
                         </div>
-
                         <div className="form-outline mb-1">
                           <label
                             className="form-label"
@@ -180,18 +164,13 @@ export default class Registration extends Component {
                             onChange={(event) => { this.setState({ roleId: event.target.value }) }}
                             placeholder="Enter roll id"
                           />
-                        <p style={{ color: 'red' }}>{this.state.inputerror.roleId}</p>
-                          
+                          <p style={{ color: 'red' }}>{this.state.inputerror.roleId}</p>
                         </div>
-
-                        <p style={{ color: 'green' }}>{this.state.data}</p>
-
                         <div className="form-check d-flex justify-content-center mb-2">
                           <input
                             className="form-check-input me-2"
                             type="checkbox"
                             onChange={() => { this.setState({ agree: !this.state.agree }) }}
-                            value=""
                             id="form2Example7cg"
                           />
                           <label
@@ -204,28 +183,29 @@ export default class Registration extends Component {
                             </Link>
                           </label>
                         </div>
-
-                        <span>
-                          <button
-                            type="button"
-                            disabled={this.state.agree}
-                            className="btn btn-success btn-block btn-lg gradient-custom-4 text-body "
-                            onClick={(event) => { this.register(event) }}
-                          >
-                            Register
-                          </button>
-                        </span>
-
-                        <span style={{ float: "right" }}>
-                          <button
-                            type="reset"
-                            className="btn btn-primary btn-block btn-lg gradient-custom-4 text-body "
-                            onClick={() => { this.reset() }}
-                          >
-                            Reset
-                          </button>
-                        </span>
-
+                        <div className="container">
+                          <div className="row text-center">
+                            <div className="col-sm-3 offset-2 ">
+                              <button
+                                type="button"
+                                disabled={this.state.agree}
+                                className="btn btn-success btn-block btn-lg gradient-custom-4 text-body "
+                                onClick={(event) => { this.register(event) }}
+                              >
+                                Register
+                              </button>
+                            </div>
+                            <div className="col-sm-3 offset-2 ">
+                              <button
+                                type="reset"
+                                className="btn btn-primary btn-block btn-lg gradient-custom-4 text-body "
+                                onClick={() => { this.reset() }}
+                              >
+                                Reset
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                         <p className="text-center text-muted mt-1 mb-0">
                           Have already an account?{" "}
                           <Link to="/login" className="fw-bold text-body">

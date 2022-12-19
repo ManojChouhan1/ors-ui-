@@ -10,10 +10,10 @@ class AddRole extends Component {
       name: '',
       discription: '',
       id: "",
-      done: "",
-      inputerror : {
-        name : '',
-        discription : ''
+      // done: "",
+      inputerror: {
+        name: '',
+        discription: ''
       }
     }
     if (this.props.params.id) {
@@ -30,48 +30,54 @@ class AddRole extends Component {
       })
     })
   }
-  reset(){
-   this.setState({
-    name: '',
-    discription: '',
-    data:"",
-    done: '',
-    inputerror : {
-      name : '',
-      discription : ''
-    }
-   })
+  reset() {
+    this.setState({
+      name: '',
+      discription: '',
+      // data: "",
+      // done: '',
+      inputerror: {
+        name: '',
+        discription: ''
+      }
+    })
   }
   submit(event) {
     event.preventDefault();
-    this.setState({ data: "" , inputerror : { name : '', discription : ''}})
-      const url = "http://api.sunilos.com:9080/ORSP10/Role/save"
-      axios.post(url, this.state).then((response) => {
-        this.setState({ list: response.data.result.data })
-        console.log(response.data)
-        
-        if(response.data.result.inputerror){
-          this.setState({inputerror :response.data.result.inputerror}) 
-        }else if(response.data.result.message === "name already exists") {
-          this.setState({ done: "Name Already exists" })
-        } else if (response.data.result.message) {
-          this.setState({ data: "could not execute this statement please change this description." })
-        } else{this.setState({ done: "Success" })}
+    this.setState({ data: "", inputerror: { name: '', discription: '' } })
+    const url = "http://api.sunilos.com:9080/ORSP10/Role/save"
+    axios.post(url, this.state).then((response) => {
+      this.setState({ list: response.data.result.data })
+      // console.log(response.data)
 
-      })
-    // }
+      if (response.data.result.inputerror) {
+        this.setState({ inputerror: response.data.result.inputerror })
+      } else if (response.data.result.message === "name already exists") {
+        // this.setState({ done: "Name Already exists" })
+        this.props.showAlert("Name Already exists !!!", "info")
+
+      } else if (response.data.result.message) {
+        // this.setState({ data: "could not execute this statement please change this description." })
+        this.props.showAlert("could not execute this statement please change this description.", "danger")
+      } else {
+        // this.setState({ done: "Success" })
+        this.props.showAlert("RoleId loaded successfully !!!", "success")
+      }
+
+    })
+
   }
   render() {
-        // console.log(this.props)
+    // console.log(this.props)
     return (
-      <div className="container" style={{ marginTop: '150px', width: "40%",border:"1px solid gray",borderRadius:"30px" }}>
+      <div className="container" style={{ marginTop: '150px', width: "40%", border: "1px solid gray", borderRadius: "30px" }}>
         <h3 style={{ textAlign: "center" }}>
           {
             this.props.params.id ? "EDIT ROLL" : "ADD ROLL"
           }
-         
+
         </h3>
-        <h3 style={{colore: "green"}}> {this.state.done}</h3>
+        {/* <h3 style={{ colore: "green" }}> {this.state.done}</h3> */}
         <form className='p-4'>
           <div className="form-group pb-3">
             <label htmlFor="exampleInputEmail1">Name</label>
@@ -105,8 +111,8 @@ class AddRole extends Component {
           </div>
           <p style={{ color: "red" }}>{this.state.inputerror.discription}</p>
 
-          <h6 style={{ color: "red" }}>{this.state.data}</h6>
-          
+          {/* <h6 style={{ color: "red" }}>{this.state.data}</h6> */}
+
           <div className='row pt-3'>
             <div className='col-md-6 d-flex justify-content-center align-items-center'>
               <button

@@ -10,15 +10,20 @@ export default class Home extends Component {
         <div className="container-fluid" >
           <div className="row">
             <div className="col">
-            <img src={require("../image/rayswoman.jpg")} alt="..." style={{width:"100%"}}/>
+              <img src={require("../image/rayswoman.jpg")} alt="..." style={{ width: "100%" }} />
             </div>
           </div>
+          <div>
+            <h1 style={{ color: "rgba(127,17,70,1)", fontFamily: "Lato, sansSerif",marginBottom: "50px" }}><em>Rays Technologies</em></h1>
+          </div>
         </div>
-        <div className="container-fluid">
-          <div className="row">
 
+        <div className="container-fluid">
+
+          <div className="row">
             <div className="col-md-6 font-4">
-              <img style={{ width: '100%', height: '550px', marginTop: '-100px' }} src={require("../image/main.jpg")} alt="..." />
+
+              <img style={{ width: '100%', height: '400px' }} src={require("../image/main.jpg")} alt="..." />
             </div>
             <div className="col-md-6">
               <p>
@@ -50,6 +55,10 @@ export default class Home extends Component {
 
           </div>
         </div>
+        <div>
+            <h1 style={{  color: "rgba(127,17,70,1)", fontFamily: "Lato, sansSerif" }}><em>Our Recruiters</em></h1>
+          </div>
+          <h6 style={{color:"blue",textAlign:"center"}}>...<i>ooo</i>...</h6>
       </div>
     );
   }

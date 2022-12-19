@@ -14,7 +14,6 @@ class AddMarksheet extends Component {
       physics: "",
       chemistry: "",
       maths: "",
-      data: "",
       toggle: false,
       nameerror: "",
       inputerror: {
@@ -54,7 +53,7 @@ class AddMarksheet extends Component {
       physics: "",
       chemistry: "",
       maths: "",
-      data: "",
+      // data: "",
       toggle: false,
       nameerror: "",
       inputerror: {
@@ -67,39 +66,38 @@ class AddMarksheet extends Component {
       }
     })
   }
-  valid(event){
+  valid(event) {
     event.preventDefault();
-    if(this.state.toggle){
-      this.setState({ data: "loginId already exists" })
-    }else{return true}
+    if (this.state.toggle) {
+      // this.setState({ data: "loginId already exists" })
+      this.props.showAlert("loginId already exists", "info")
+    } else { return true }
   }
   submit(event) {
-     if(this.valid(event)){
-    event.preventDefault();
-    this.setState({
-      nameerror: "", data: "",
-      inputerror: { "studentId": "", "chemistry": "", "maths": "", "physics": "", "rollNo": "" }
-    })
-    const url = "http://api.sunilos.com:9080/ORSP10/Marksheet/save";
-    axios.post(url, this.state).then((response) => {
-      this.setState({ list: response.data.result })
-      // console.log(response.data.inputerror)
+    if (this.valid(event)) {
+      event.preventDefault();
+      this.setState({
+        nameerror: "",
+        inputerror: { "studentId": "", "chemistry": "", "maths": "", "physics": "", "rollNo": "" }
+      })
+      const url = "http://api.sunilos.com:9080/ORSP10/Marksheet/save";
+      axios.post(url, this.state).then((response) => {
+        this.setState({ list: response.data.result })
+        // console.log(response.data.inputerror)
 
-      if (response.data.result.inputerror && this.state.name === "") {
-        this.setState({ inputerror: response.data.result.inputerror, nameerror: "must not be empty" })
-        // } else if (this.state.name === "") {
-        //   this.setState({ nameerror: "must not be empty" })
-      } else if (response.data.result.inputerror) {
-        this.setState({ inputerror: response.data.result.inputerror })
-      }  else if (response.data.success === true) {
-        this.setState({ data: " Success", toggle: true })
-      } else {
-        this.setState({ data: " Already exists" })
-
-      }
-
-
-    })
+        if (response.data.result.inputerror && this.state.name === "") {
+          this.setState({ inputerror: response.data.result.inputerror, nameerror: "must not be empty" })
+          // } else if (this.state.name === "") {
+          //   this.setState({ nameerror: "must not be empty" })
+        } else if (response.data.result.inputerror) {
+          this.setState({ inputerror: response.data.result.inputerror })
+        } else if (response.data.success === true) {
+          this.setState({ toggle: true })
+          this.props.showAlert("Marksheet loaded successfully", "success")
+        } else {
+          this.setState({ nameerror: " Already exists" })
+        }
+      })
     }
 
   }
@@ -113,16 +111,15 @@ class AddMarksheet extends Component {
         // style={{backgroundImage: url(require("../image/home.jpg"))}}
         >
           <div className="mask d-flex align-items-center h-50 gradient-custom-3" style={{ marginBottom: "200px" }}>
-            <div className="container h-50">
+            <div className="container h-50" style={{ width: "800px" }}>
               <div className="row d-flex justify-content-center align-items-center h-50">
                 <div className="col-12 col-md-9 col-lg-7 col-xl-6">
-                  <div className="card 1rem!important" style={{ borderRadius: '30px', marginBottom: "150px", width: "80%" }}>
+                  <div className="card 1rem!important" style={{ borderRadius: '30px', marginBottom: "150px" }}>
                     <h3 style={{ textAlign: 'center' }} >
                       {
                         this.props.params.id ? "EDIT MARKSHEET" : "ADD MARKSHEET"
                       }
                     </h3>
-                    <div style={{ color: "green" }}> <h6>{this.state.data}</h6></div>
                     <div className="card-body p-5">
                       <form >
                         <div className="form-outline mb-2">
@@ -244,8 +241,6 @@ class AddMarksheet extends Component {
                           />
                         </div>
                         <div style={{ color: "red" }}> <h6>{this.state.inputerror.maths}</h6></div>
-
-                        <div style={{ color: "green" }}> <h6>{this.state.data}</h6></div>
                         <div className='row pt-3'>
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>
                             <button

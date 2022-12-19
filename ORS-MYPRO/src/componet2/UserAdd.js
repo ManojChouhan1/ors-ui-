@@ -9,7 +9,6 @@ class UserAdd extends Component {
     super(props);
 
     this.state = {
-      list: [],
       firstName: '',
       lastName: '',
       loginId: '',
@@ -17,6 +16,7 @@ class UserAdd extends Component {
       roleId: '',
       message: '',
       id: '',
+      epassword: '',
       inputerror: {
         "firstName": "",
         "lastName": "",
@@ -28,11 +28,8 @@ class UserAdd extends Component {
       this.get()
     }
   }
-
   get() {
-    let id = this.props.params.id;
-    var url = "http://api.sunilos.com:9080/ORSP10/Auth/get/" + id;
-
+    const url = "http://api.sunilos.com:9080/ORSP10/Auth/get/" + this.props.params.id;
     axios.get(url).then((response) => {
       this.setState({
         firstName: response.data.result.data.firstName,
@@ -43,10 +40,7 @@ class UserAdd extends Component {
         id: response.data.result.data.id
       });
     });
-
   }
-
-
   reset() {
     this.setState({
       firstName: '',
@@ -56,7 +50,7 @@ class UserAdd extends Component {
       roleId: '',
       message: '',
       data: '',
-      toggle: '',
+      epassword: '',
       inputerror: {
         "firstName": "",
         "lastName": "",
@@ -65,32 +59,33 @@ class UserAdd extends Component {
       }
     })
   }
-  
+
   submit(event) {
     event.preventDefault();
     this.setState({
-      data: '', inputerror: {
+      epassword: '',
+      inputerror: {
         "firstName": "", "lastName": "", "loginId": "", "roleId": ""
       }
     })
-
     let url = "http://api.sunilos.com:9080/ORSP10/User/save";
     axios.post(url, this.state).then((response) => {
-      this.setState({ list: response.data.result })
-      console.log(response.data.result)
-
-      if (response.data.result.inputerror) {
+      // console.log(response.data.result)
+      if (response.data.result.inputerror && this.state.password === "") {
+        this.setState({ inputerror: response.data.result.inputerror, epassword: 'must not be empty' })
+      } if (response.data.result.inputerror) {
         this.setState({ inputerror: response.data.result.inputerror })
-      }else if (response.data.result.message==="loginId already exists") {
-        this.setState({ data: "loginId already exists" })
-      }  else if (!response.data.success) {
-        this.setState({ data: "Role id incorrect" })
+      } if (this.state.password === "") {
+        this.setState({ epassword: 'must not be empty' })
+      } else if (response.data.result.message === "loginId already exists") {
+        this.props.showAlert("loginId already exists", "info")
+      } else if (!response.data.success) {
+        this.props.showAlert("Role id incorrect", "danger")
       } else {
-        this.setState({ data: " success" })
+        this.props.showAlert("UserId loaded successfully!!!", "success")
       }
     })
   }
-
   render() {
     return (
       <div>
@@ -98,12 +93,11 @@ class UserAdd extends Component {
           className="vh-100 bg-image"
           style={{ backgroundImage: (require("../image/home.jpg")) }}
         >
-
           <div className="mask d-flex align-items-center h-50 gradient-custom-3">
-            <div className="container h-50">
+            <div className="container h-50" style={{ width: "800px" }}>
               <div className="row d-flex justify-content-center align-items-center h-50">
                 <div className="col-12 col-md-9 col-lg-7 col-xl-6">
-                  <div className="card p-5" style={{ borderRadius: '30px', marginBottom: "100px", width: "80%" }}>
+                  <div className="card p-5" style={{ borderRadius: '30px', marginBottom: "100px" }}>
                     <h1 className=" d-flex justify-content-center align-items-center">
                       {
                         this.props.params.id ? "EDIT USER" : "ADD USER"
@@ -128,7 +122,6 @@ class UserAdd extends Component {
                             placeholder="Enter first name"
                           />
                           <div style={{ color: "red" }}> <p>{this.state.inputerror.firstName}</p></div>
-
                         </div>
                         <div className="form-outline mb24">
                           <label
@@ -148,7 +141,6 @@ class UserAdd extends Component {
                             placeholder="Enter last name"
                           />
                           <div style={{ color: "red" }}> <p>{this.state.inputerror.lastName}</p></div>
-
                         </div>
 
                         <div className="form-outline mb-2">
@@ -169,9 +161,7 @@ class UserAdd extends Component {
                             placeholder="Enter email id"
                           />
                           <div style={{ color: "red" }}> <p>{this.state.inputerror.loginId}</p></div>
-
                         </div>
-
                         <div className="form-outline mb-2">
                           <label
                             className="form-label"
@@ -188,10 +178,8 @@ class UserAdd extends Component {
                             value={this.state.password}
                             placeholder="Enter password"
                           />
-
-
+                          <div style={{ color: "red" }}> <p>{this.state.epassword}</p></div>
                         </div>
-
                         <div className="form-outline mb-2">
                           <label
                             className="form-label"
@@ -209,9 +197,8 @@ class UserAdd extends Component {
                             placeholder="Enter roll id"
                           />
                           <div style={{ color: "red" }}> <p>{this.state.inputerror.roleId}</p></div>
-
                         </div>
-                        <div style={{ color: "green" }}> <p>{this.state.data}</p></div>
+                        {/* <div style={{ color: "green" }}> <p>{this.state.data}</p></div> */}
                         <div className='row'>
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>
                             <button
@@ -219,7 +206,6 @@ class UserAdd extends Component {
                               className="btn btn-success btn-block btn-lg gradient-custom-4 text-body "
                               onClick={(event) => { this.submit(event) }}
                             >
-
                               {
                                 this.props.params.id ? "Update" : "AddUser"
                               }

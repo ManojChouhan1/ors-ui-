@@ -13,8 +13,7 @@ class AddStudent extends Component {
       "mobileNo": "",
       "email": "",
       "id": "",
-      "data": "",
-      "toggle": false,
+      toggle: false,
       inputerror: {
         "firstName": "",
         "lastName": "",
@@ -48,8 +47,7 @@ class AddStudent extends Component {
       "collegeId": "",
       "mobileNo": "",
       "email": "",
-      "data": "",
-      "toggle": false,
+      toggle: false,
       inputerror: {
         "firstName": "",
         "lastName": "",
@@ -61,13 +59,12 @@ class AddStudent extends Component {
   }
   valid() {
     if (this.state.toggle) {
-      this.setState({ data: "StudentInfo Already exists" })
+      this.props.showAlert("StudentInfo Already exists", "info")
     } else { return true }
   }
   submit(event) {
     event.preventDefault();
     this.setState({
-      data: "",
       inputerror: {
         "firstName": "", "lastName": "", "collegeId": "", "mobileNo": "", "email": ""
       }
@@ -75,20 +72,18 @@ class AddStudent extends Component {
     if (this.valid()) {
       const url = "http://api.sunilos.com:9080/ORSP10/Student/save";
       axios.post(url, this.state).then((response) => {
-        console.log(response.data.success)
-        if(response.data.result.inputerror){
-          this.setState({inputerror : response.data.result.inputerror})
-        }
-        else if(!response.data.success) {
-          this.setState({ data: "Enter correct mobileNo./Email" })
-        } else if (response.data.success) {
-          this.setState({ data: " success", toggle: true })
+        // console.log(response.data.success)
+        if (response.data.result.inputerror) {
+          this.setState({ inputerror: response.data.result.inputerror })
+        } else {
+          this.props.showAlert("Student id loaded successfully", "success")
+          this.setState({ toggle: true })
         }
       })
     }
   }
   render() {
-    console.log(this.props.name)
+    // console.log(this.props.name)
     return (
       <div >
         <section
@@ -96,18 +91,16 @@ class AddStudent extends Component {
         // style={{backgroundImage: url(require("../image/home.jpg"))}}
         >
           <div className="mask d-flex align-items-center h-50 gradient-custom-3">
-            <div className="container h-50">
+            <div className="container h-50" style={{ width: "800px" }}>
               <div className="row d-flex justify-content-center align-items-center h-50">
                 <div className="col-12 col-md-9 col-lg-7 col-xl-6">
-                  <div className="card" style={{ borderRadius: '30px', marginBottom: "100px", width: "70%" }}>
+                  <div className="card" style={{ borderRadius: '30px', marginBottom: "100px" }}>
                     <h3 className=" d-flex justify-content-center align-items-center">
                       {
                         this.props.params.id ? "EDIT STUDENTS" : "ADD STUDENTS"
                       }
                     </h3>
                     <div className="card-body p-2">
-
-
                       <form >
                         <div className="form-outline mb-3">
                           <label
@@ -124,8 +117,7 @@ class AddStudent extends Component {
                             name='firstName'
                             value={this.state.firstName}
                           />
-                        <div style={{ color: "red" }}><p>{this.state.inputerror.firstName}</p></div>
-
+                          <div style={{ color: "red" }}><p>{this.state.inputerror.firstName}</p></div>
                         </div>
                         <div className="form-outline mb-3">
                           <label
@@ -142,10 +134,8 @@ class AddStudent extends Component {
                             name='lastName'
                             value={this.state.lastName}
                           />
-                        <div style={{ color: "red" }}><p>{this.state.inputerror.lastName}</p></div>
-
+                          <div style={{ color: "red" }}><p>{this.state.inputerror.lastName}</p></div>
                         </div>
-
                         <div className="form-outline mb-3">
                           <label
                             className="form-label"
@@ -160,12 +150,9 @@ class AddStudent extends Component {
                             onChange={(event) => { this.setState({ collegeId: event.target.value }) }}
                             name="collegeId"
                             value={this.state.collegeId}
-
                           />
-                        <div style={{ color: "red" }}><p>{this.state.inputerror.collegeId}</p></div>
-
+                          <div style={{ color: "red" }}><p>{this.state.inputerror.collegeId}</p></div>
                         </div>
-
                         <div className="form-outline mb-3">
                           <label
                             className="form-label"
@@ -181,10 +168,8 @@ class AddStudent extends Component {
                             name="mobileNo"
                             value={this.state.mobileNo}
                           />
-                        <div style={{ color: "red" }}><p>{this.state.inputerror.mobileNo}</p></div>
-
+                          <div style={{ color: "red" }}><p>{this.state.inputerror.mobileNo}</p></div>
                         </div>
-
                         <div className="form-outline mb-2">
                           <label
                             className="form-label"
@@ -200,10 +185,8 @@ class AddStudent extends Component {
                             name="email"
                             value={this.state.email}
                           />
-                        <div style={{ color: "red" }}><p>{this.state.inputerror.email}</p></div>
-
+                          <div style={{ color: "red" }}><p>{this.state.inputerror.email}</p></div>
                         </div>
-                        <div style={{ color: "green" }}><p>{this.state.data}</p></div>
                         <div className='row pt-3'>
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>
                             <button
@@ -214,7 +197,6 @@ class AddStudent extends Component {
                               {
                                 this.props.params.id ? "Update" : "Add"
                               }
-
                             </button>
                           </div>
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>

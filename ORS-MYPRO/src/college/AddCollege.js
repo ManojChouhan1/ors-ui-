@@ -6,7 +6,6 @@ class AddCollege extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: [],
       "address": "",
       "city": "",
       "name": "",
@@ -38,14 +37,12 @@ class AddCollege extends Component {
     })
   }
   reset() {
-    console.log("reset the value")
     this.setState({
       "address": "",
       "city": "",
       "name": "",
       "state": "",
       "phoneNo": "",
-      "data": "",
       inputerror: {
         "address": "",
         "city": "",
@@ -59,21 +56,20 @@ class AddCollege extends Component {
   submit(event) {
     event.preventDefault();
     this.setState({
-      "data": "", inputerror: {
+       inputerror: {
         "address": "", "city": "", "name": "", "state": "", "phoneNo": ""
       }
     })
     const url = "http://api.sunilos.com:9080/ORSP10/College/save";
     axios.post(url, this.state).then((response) => {
-      // console.log(response.data)
-
       this.setState({ list: response.data.result.data })
       if (response.data.result.inputerror) {
         this.setState({ inputerror: response.data.result.inputerror })
       } else if (response.data.success) {
-        this.setState({ data: " success" })
+        this.props.showAlert("College loaded successfully", "success")
       } else {
-        this.setState({ data: "Login id already exist" })
+        // this.setState({ data: "Login id already exist" })
+        this.props.showAlert("Collage name already exist", "info")
       }
     })
 
@@ -88,18 +84,16 @@ class AddCollege extends Component {
         // style={{backgroundImage: url(require("../image/home.jpg"))}}
         >
           <div className="mask d-flex align-items-center h-50 gradient-custom-3">
-            <div className="container h-50">
+            <div className="container h-50" style={{ width: "800px" }}>
               <div className="row d-flex justify-content-center align-items-center h-50">
                 <div className="col-12 col-md-9 col-lg-7 col-xl-6">
-                  <div className="card" style={{ borderRadius: '30px', width: "70%", marginBottom: "80px" }}>
+                  <div className="card" style={{ borderRadius: '30px', marginBottom: "80px" }}>
                     <h1 style={{ textAlign: 'center' }}>
                       {
                         this.props.params.id ? "EDIT COLLEGE" : "ADD COLLEGE"
                       }
                     </h1>
                     <div className="card-body p-3">
-
-
                       <form >
                         <div className="form-outline mb-2">
                           <label
@@ -195,7 +189,6 @@ class AddCollege extends Component {
                           <h6 style={{ color: "red" }}>{this.state.inputerror.state}</h6>
 
                         </div>
-                        <h6 style={{ color: "green" }}>{this.state.data}</h6>
                         <div className='row pt-3'>
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>
                             <button
