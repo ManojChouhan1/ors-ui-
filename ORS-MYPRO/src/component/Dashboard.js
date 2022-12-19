@@ -54,8 +54,8 @@ export default class Dashboard extends Component {
                                 <NavDropdown title={localStorage.Name} id="basic-nav-dropdown">
                                     <NavDropdown.Item > {localStorage.Name}</NavDropdown.Item>
                                 </NavDropdown>
-                                <NavDropdown title={<FontAwesomeIcon icon={faLockOpen} style={{ color: 'blue' }} />} id="basic-nav-dropdown">
-                                    <NavDropdown.Item  ><button onClick={() => { this.logout() }}>Logout </button></NavDropdown.Item>
+                                <NavDropdown title="Logout" id="basic-nav-dropdown">
+                                    <NavDropdown.Item  ><button onClick={() => { this.logout() }}> {<FontAwesomeIcon icon={faLockOpen} style={{ color: 'blue' }} />}Logout</button></NavDropdown.Item>
                                 </NavDropdown>
                             </Nav>
                         </Navbar.Collapse>

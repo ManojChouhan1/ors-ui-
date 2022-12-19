@@ -6,6 +6,7 @@ export default class Registration extends Component {
   constructor() {
     super();
     this.state = {
+      list: [],
       "firstName": '',
       "lastName": '',
       "loginId": '',
@@ -20,6 +21,12 @@ export default class Registration extends Component {
         "roleId": ""
       }
     }
+  }
+  componentDidMount() {
+    axios.post("http://api.sunilos.com:9080/ORSP10/Role/search", this.state).then((response) => {
+      this.setState({ list: response.data.result.data })
+      console.log("response", response.data.result.data)
+    })
   }
   reset() {
     this.setState({
@@ -66,6 +73,10 @@ export default class Registration extends Component {
         this.props.showAlert("Role id incorrect", "danger")
       }
     })
+  }
+  handleIChange=(event)=>{
+    console.log("event",)
+    this.setState({data: event.target.value})
   }
   render() {
     return (
@@ -157,13 +168,29 @@ export default class Registration extends Component {
                           >
                             Role Id
                           </label>
+                          <select name="cars" id="cars" style={{ float: "right" }} onChange={(this.handleIChange)}>
+                            <option value="volvo">Name</option>
+
+                            {
+                              this.state.list &&
+                                  this.state.list.map((item, i)=>{
+                                    return( 
+                                    <option value={item.id}>{item.name}</option>
+                                    )
+                                  })
+                            }
+                            
+                          </select>
                           <input
                             type="roleId"
                             id="form3Example6cg"
                             className="form-control form-control-lg"
                             onChange={(event) => { this.setState({ roleId: event.target.value }) }}
                             placeholder="Enter roll id"
+                            value={this.state.data}
                           />
+
+
                           <p style={{ color: 'red' }}>{this.state.inputerror.roleId}</p>
                         </div>
                         <div className="form-check d-flex justify-content-center mb-2">
@@ -186,14 +213,16 @@ export default class Registration extends Component {
                         <div className="container">
                           <div className="row text-center">
                             <div className="col-sm-3 offset-2 ">
-                              <button
-                                type="button"
-                                disabled={this.state.agree}
-                                className="btn btn-success btn-block btn-lg gradient-custom-4 text-body "
-                                onClick={(event) => { this.register(event) }}
-                              >
-                                Register
-                              </button>
+                              <Link to="/login">
+                                <button
+                                  type="button"
+                                  disabled={this.state.agree}
+                                  className="btn btn-success btn-block btn-lg gradient-custom-4 text-body "
+                                  onClick={(event) => { this.register(event) }}
+                                >
+                                  Register
+                                </button>
+                              </Link>
                             </div>
                             <div className="col-sm-3 offset-2 ">
                               <button
