@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import withRouter from '../componet2/withRouter';
 
+
 class AddCollege extends Component {
   constructor(props) {
     super(props);
@@ -199,7 +200,6 @@ class AddCollege extends Component {
                               {
                                 this.props.params.id ? "Update" : "Add"
                               }
-
                             </button>
                           </div>
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>

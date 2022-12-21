@@ -68,7 +68,8 @@ class AddRole extends Component {
 
   }
   render() {
-    // console.log(this.props)
+    console.log(this.props)
+    console.log(this.props.params.id)
     return (
       <div className="container" style={{ marginTop: '150px', width: "40%", border: "1px solid gray", borderRadius: "30px" }}>
         <h3 style={{ textAlign: "center" }}>

@@ -1,11 +1,11 @@
 import React from 'react'
 import { useParams } from 'react-router'
 
-const withRouter = (WrappedComponent) => props => {
+const withRouter = (WpdC) => props => {
     const params = useParams();
 
     return (
-        <WrappedComponent {...props} params={params} />
+        <WpdC {...props} params={params} />
     )
 }
 export default withRouter;

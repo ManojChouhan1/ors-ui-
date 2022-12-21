@@ -1,12 +1,9 @@
 import axios from "axios";
 import React, { Component } from "react";
-// import * as ReactDOM from 'react-dom';
-import ReactDOM from "react-dom/client";
 import { Link } from "react-router-dom";
-import App1 from "./App1";
 export default class Login extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       loginId: "",
       password: "",
@@ -15,7 +12,7 @@ export default class Login extends Component {
         "loginId": ""
       }
     };
-  }
+    }
   submit(event) {
     event.preventDefault();
     this.setState({
@@ -34,25 +31,13 @@ export default class Login extends Component {
       }
       else if (response.data.success) {
         localStorage.setItem("Name", response.data.result.data.name)
-        // alert("form has been submitted");
-        // first way
-        // return ReactDOM.render(
-        //   <React.StrictMode>
-        //     <Dashboard/>
-        //   </React.StrictMode>,
-        //   document.getElementById("root")
-        // );
-
-        //Second way
-
-        const root = ReactDOM.createRoot(document.getElementById("root"));
-        root.render(
-          <React.StrictMode>
-            <App1 />
-          </React.StrictMode>
-        );
-      } else { this.setState({ data: "Ab kya hai bhai" }) }
-    })
+        sessionStorage.setItem("tokan", "Session time out please login again")
+         window.location.href="/"
+      } else {
+        console.log("Daya kuch to gadbad hai")
+      }
+    }
+    )
   }
   reset() {
     this.setState({
@@ -67,10 +52,13 @@ export default class Login extends Component {
   }
 
   render() {
+      console.log(this.props)
     return (
+      
       <div className="container" style={{ marginTop: '80px', width: "30%", border: "1px solid gray", padding: "30px", borderRadius: "50px" }}>
         <h1 className="text-uppercase text-center mb-5">LOGIN FORM</h1>
         <form >
+          <h6 style={{color:"red"}}>{this.props.mypro}</h6>
           <div className="form-group">
             <label htmlFor="exampleInputEmail1">Email address</label>
             <input

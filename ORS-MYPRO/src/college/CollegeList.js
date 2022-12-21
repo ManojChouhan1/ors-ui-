@@ -88,7 +88,6 @@ export default class CollegeList extends Component {
                 )
               })
             }
-
           </tbody>
         </Table>
       </div>
