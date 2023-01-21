@@ -32,15 +32,16 @@ class AddMarksheet extends Component {
   get() {
     const url = "http://api.sunilos.com:9080/ORSP10/Marksheet/get/" + this.props.params.id;
     axios.get(url).then((response) => {
-      console.log(response.data.result.data)
+      const data = response.data.result.data ;
+      console.log("data", data)
       this.setState({
-        id: response.data.result.data.id,
-        name: response.data.result.data.name,
-        rollNo: response.data.result.data.rollNo,
-        studentId: response.data.result.data.studentId,
-        physics: response.data.result.data.physics,
-        chemistry: response.data.result.data.chemistry,
-        maths: response.data.result.data.maths
+        id: data.id,
+        name: data.name,
+        rollNo: data.rollNo,
+        studentId: data.studentId,
+        physics: data.physics,
+        chemistry: data.chemistry,
+        maths: data.maths
       })
     })
   }
@@ -53,7 +54,6 @@ class AddMarksheet extends Component {
       physics: "",
       chemistry: "",
       maths: "",
-      // data: "",
       toggle: false,
       nameerror: "",
       inputerror: {
@@ -69,8 +69,7 @@ class AddMarksheet extends Component {
   valid(event) {
     event.preventDefault();
     if (this.state.toggle) {
-      // this.setState({ data: "loginId already exists" })
-      this.props.showAlert("loginId already exists", "info")
+      this.props.showAlert("Marksheet already exists", "danger")
     } else { return true }
   }
   submit(event) {
@@ -83,29 +82,22 @@ class AddMarksheet extends Component {
       const url = "http://api.sunilos.com:9080/ORSP10/Marksheet/save";
       axios.post(url, this.state).then((response) => {
         this.setState({ list: response.data.result })
-        // console.log(response.data.inputerror)
-
         if (response.data.result.inputerror && this.state.name === "") {
           this.setState({ inputerror: response.data.result.inputerror, nameerror: "must not be empty" })
-          // } else if (this.state.name === "") {
-          //   this.setState({ nameerror: "must not be empty" })
         } else if (response.data.result.inputerror) {
           this.setState({ inputerror: response.data.result.inputerror })
         } else if (response.data.success === true) {
           this.setState({ toggle: true })
-          this.props.showAlert("Marksheet loaded successfully", "success")
+          this.props.showAlert("Marksheet save successfully", "success")
         } else {
           this.setState({ nameerror: " Already exists" })
         }
       })
     }
-
   }
   render() {
-    // console.log(this.props)
     return (
       <div >
-
         <section
           className="vh-100 bg-image"
         // style={{backgroundImage: url(require("../image/home.jpg"))}}
@@ -120,7 +112,7 @@ class AddMarksheet extends Component {
                         this.props.params.id ? "EDIT MARKSHEET" : "ADD MARKSHEET"
                       }
                     </h3>
-                    <div className="card-body p-5">
+                    <div className="card-body p-2">
                       <form >
                         <div className="form-outline mb-2">
                           <label
@@ -138,10 +130,8 @@ class AddMarksheet extends Component {
                             value={this.state.name}
                             placeholder="Enter first name"
                           />
-
                         </div>
                         <div style={{ color: "red" }}> <h6>{this.state.nameerror}</h6></div>
-
                         <div className="form-outline mb-2">
                           <label
                             className="form-label"
@@ -158,10 +148,8 @@ class AddMarksheet extends Component {
                             value={this.state.rollNo}
                             placeholder="Enter roll number"
                           />
-
                         </div>
                         <div style={{ color: "red" }}> <h6>{this.state.inputerror.rollNo}</h6></div>
-
                         <div className="form-outline mb-2">
                           <label
                             className="form-label"
@@ -178,10 +166,8 @@ class AddMarksheet extends Component {
                             value={this.state.studentId}
                             placeholder="Enter student id"
                           />
-
                         </div>
                         <div style={{ color: "red" }}> <h6>{this.state.inputerror.studentId}</h6></div>
-
                         <div className="form-outline mb-2">
                           <label
                             className="form-label"
@@ -198,10 +184,8 @@ class AddMarksheet extends Component {
                             value={this.state.physics}
                             placeholder="Enter physics mark"
                           />
-
                         </div>
                         <div style={{ color: "red" }}> <h6>{this.state.inputerror.physics}</h6></div>
-
                         <div className="form-outline mb-2">
                           <label
                             className="form-label"
@@ -218,11 +202,8 @@ class AddMarksheet extends Component {
                             value={this.state.chemistry}
                             placeholder="Enter chemistry mark"
                           />
-
                         </div>
                         <div style={{ color: "red" }}> <h6>{this.state.inputerror.chemistry}</h6></div>
-
-
                         <div className="form-outline mb-2 ">
                           <label
                             className="form-label"
@@ -245,19 +226,18 @@ class AddMarksheet extends Component {
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>
                             <button
                               type="btn"
-                              className="btn btn-success btn-block btn-lg gradient-custom-4 text-body "
+                              className="btn btn-success btn-block btn-md gradient-custom-4 text-body "
                               onClick={(event) => { this.submit(event) }}
                             >
                               {
                                 this.props.params.id ? "Update" : "Add"
                               }
-
                             </button>
                           </div>
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>
                             <button
                               type="reset"
-                              className="btn btn-primary btn-block btn-lg gradient-custom-4 text-body "
+                              className="btn btn-primary btn-block btn-md gradient-custom-4 text-body "
                               onClick={() => { this.reset() }}
                             >
                               Reset

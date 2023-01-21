@@ -10,7 +10,6 @@ class AddRole extends Component {
       name: '',
       discription: '',
       id: "",
-      // done: "",
       inputerror: {
         name: '',
         discription: ''
@@ -34,8 +33,6 @@ class AddRole extends Component {
     this.setState({
       name: '',
       discription: '',
-      // data: "",
-      // done: '',
       inputerror: {
         name: '',
         discription: ''
@@ -54,14 +51,14 @@ class AddRole extends Component {
         this.setState({ inputerror: response.data.result.inputerror })
       } else if (response.data.result.message === "name already exists") {
         // this.setState({ done: "Name Already exists" })
-        this.props.showAlert("Name Already exists !!!", "info")
+        this.props.showAlert("Name Already exists !!!", "danger")
 
       } else if (response.data.result.message) {
         // this.setState({ data: "could not execute this statement please change this description." })
-        this.props.showAlert("could not execute this statement please change this description.", "danger")
+        this.props.showAlert("could not execute this statement please change this description.", "info")
       } else {
         // this.setState({ done: "Success" })
-        this.props.showAlert("RoleId loaded successfully !!!", "success")
+        this.props.showAlert("RoleId save successfully !!!", "success")
       }
 
     })

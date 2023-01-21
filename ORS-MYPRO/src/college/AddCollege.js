@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import withRouter from '../componet2/withRouter';
 
-
 class AddCollege extends Component {
   constructor(props) {
     super(props);
@@ -24,19 +23,6 @@ class AddCollege extends Component {
       this.get();
     }
   }
-  get() {
-    const url = "http://api.sunilos.com:9080/ORSP10/College/get/" + this.props.params.id;
-    axios.get(url).then((response) => {
-      this.setState({
-        "address": response.data.result.data.address,
-        "city": response.data.result.data.city,
-        "name": response.data.result.data.name,
-        "state": response.data.result.data.state,
-        "phoneNo": response.data.result.data.phoneNo,
-        "id": response.data.result.data.id
-      })
-    })
-  }
   reset() {
     this.setState({
       "address": "",
@@ -53,11 +39,23 @@ class AddCollege extends Component {
       }
     })
   }
-
+  get() {
+    const url = "http://api.sunilos.com:9080/ORSP10/College/get/" + this.props.params.id;
+    axios.get(url).then((response) => {
+      this.setState({
+        "address": response.data.result.data.address,
+        "city": response.data.result.data.city,
+        "name": response.data.result.data.name,
+        "state": response.data.result.data.state,
+        "phoneNo": response.data.result.data.phoneNo,
+        "id": response.data.result.data.id
+      })
+    })
+  }
   submit(event) {
     event.preventDefault();
     this.setState({
-       inputerror: {
+      inputerror: {
         "address": "", "city": "", "name": "", "state": "", "phoneNo": ""
       }
     })
@@ -67,19 +65,17 @@ class AddCollege extends Component {
       if (response.data.result.inputerror) {
         this.setState({ inputerror: response.data.result.inputerror })
       } else if (response.data.success) {
-        this.props.showAlert("College loaded successfully", "success")
+        this.props.showAlert("College save successfully", "success")
       } else {
-        // this.setState({ data: "Login id already exist" })
-        this.props.showAlert("Collage name already exist", "info")
+        this.props.showAlert("Collage name already exist", "danger")
       }
     })
 
   }
   render() {
-    console.log(this.props)
+    // console.log(this.props)
     return (
       <div>
-
         <section
           className="vh-100 bg-image"
         // style={{backgroundImage: url(require("../image/home.jpg"))}}
@@ -112,7 +108,6 @@ class AddCollege extends Component {
                             value={this.state.name}
                           />
                           <h6 style={{ color: "red" }}>{this.state.inputerror.name}</h6>
-
                         </div>
                         <div className="form-outline mb-2">
                           <label
@@ -130,9 +125,7 @@ class AddCollege extends Component {
                             value={this.state.phoneNo}
                           />
                           <h6 style={{ color: "red" }}>{this.state.inputerror.phoneNo}</h6>
-
                         </div>
-
                         <div className="form-outline mb-2">
                           <label
                             className="form-label"
@@ -147,12 +140,9 @@ class AddCollege extends Component {
                             onChange={(event) => { this.setState({ address: event.target.value }) }}
                             name="address"
                             value={this.state.address}
-
                           />
                           <h6 style={{ color: "red" }}>{this.state.inputerror.address}</h6>
-
                         </div>
-
                         <div className="form-outline mb-2">
                           <label
                             className="form-label"
@@ -169,9 +159,7 @@ class AddCollege extends Component {
                             value={this.state.city}
                           />
                           <h6 style={{ color: "red" }}>{this.state.inputerror.city}</h6>
-
                         </div>
-
                         <div className="form-outline mb-2">
                           <label
                             className="form-label"
@@ -188,7 +176,6 @@ class AddCollege extends Component {
                             value={this.state.state}
                           />
                           <h6 style={{ color: "red" }}>{this.state.inputerror.state}</h6>
-
                         </div>
                         <div className='row pt-3'>
                           <div className='col-md-6 d-flex justify-content-center align-items-center'>

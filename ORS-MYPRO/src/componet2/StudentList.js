@@ -53,7 +53,7 @@ export default class StudentList extends Component {
           </span>
         </form>
         <hr />
-        <Table striped bordered hover>
+        <Table striped bordered hover id='ta'>
           <thead>
             <tr>
               <th>#</th>

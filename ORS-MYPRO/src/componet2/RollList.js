@@ -50,7 +50,7 @@ export default class RollList extends Component {
           </span>
         </form>
         <hr />
-        <Table striped bordered hover style={{ marginBottom: '100px' }}>
+        <Table striped bordered hover style={{ marginBottom: '100px' }} id='ta'>
           <thead>
             <tr>
               <th>#</th>

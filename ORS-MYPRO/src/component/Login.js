@@ -1,7 +1,9 @@
 import axios from "axios";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-export default class Login extends Component {
+
+// import Dashboard from "./Dashboard"
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +14,7 @@ export default class Login extends Component {
         "loginId": ""
       }
     };
-    }
+  }
   submit(event) {
     event.preventDefault();
     this.setState({
@@ -23,21 +25,23 @@ export default class Login extends Component {
     })
     const url = "http://api.sunilos.com:9080/ORSP10/Auth/login"
     axios.post(url, this.state).then((response) => {
-      console.log(response.data)
+      // console.log(response.data)
       if (response.data.result.inputerror) {
         this.setState({ inputerror: response.data.result.inputerror })
       } else if (response.data.result.message) {
         this.props.showAlert(response.data.result.message, "info")
       }
       else if (response.data.success) {
+        
         localStorage.setItem("Name", response.data.result.data.name)
         sessionStorage.setItem("tokan", "Session time out please login again")
-         window.location.href="/"
-      } else {
-        console.log("Daya kuch to gadbad hai")
+        localStorage.getItem("path") !== null ? window.location.pathname = localStorage.getItem("path") : window.location.href="/"
       }
+      //  else {
+      //   console.log("Daya kuch to gadbad hai")
+      // }
     }
-    )
+    )    
   }
   reset() {
     this.setState({
@@ -50,15 +54,13 @@ export default class Login extends Component {
       }
     })
   }
-
   render() {
-      console.log(this.props)
+    console.log(this.props)
     return (
-      
       <div className="container" style={{ marginTop: '80px', width: "30%", border: "1px solid gray", padding: "30px", borderRadius: "50px" }}>
         <h1 className="text-uppercase text-center mb-5">LOGIN FORM</h1>
+        <p style={{ color: "red" }}>{localStorage.getItem("logmsg")}</p>
         <form >
-          <h6 style={{color:"red"}}>{this.props.mypro}</h6>
           <div className="form-group">
             <label htmlFor="exampleInputEmail1">Email address</label>
             <input
@@ -113,7 +115,7 @@ export default class Login extends Component {
           </div>
           <p className="text-center text-muted mt-1 mb-0">
             You have no an account?{" "}
-            <Link to="/registration" className="fw-bold text-body">
+            <Link to="/adduser" className="fw-bold text-body">
               <u>Create an account</u>
             </Link>
           </p>
@@ -122,3 +124,4 @@ export default class Login extends Component {
     );
   }
 }
+export default Login;

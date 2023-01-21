@@ -3,36 +3,55 @@ import { Link } from 'react-router-dom';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faLockOpen, faSignIn, faUser } from '@fortawesome/free-solid-svg-icons'
-
 export default class Dashboard extends Component {
+    constructor() {
+        super();
+        this.state = {
+            mode: 'light'
+        }
+    }
+    handleMode = () => {
+        if (this.state.mode === "light") {
+            this.setState({ mode: "dark" })
+            document.body.style.background = "rgb(5 17 34)";
+            document.body.style.color = "#636464";
+            // document.getElementById('ta').style.color = "white"
+           
+           
+        } else {
+            this.setState({ mode: "light" })
+            document.body.style.background = "#e9ecef";
+            document.body.style.color = "black";
+            // document.getElementById('ta').style.color = "black"
+        }
+    }
     logout() {
         window.localStorage.clear();
-        window.location.href = "/login";
+        window.location.pathname = "/login";
     }
     render() {
         const Nam = localStorage.getItem("Name"); //
-        console.log("Getitem", Nam);  //
+        // console.log("GetItem", Nam);  
         return (
             <div className='App'>
 
                 <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
                     <Container>
                         <img src={require("../image/Logo.jpg")} alt="..." width="100" height="50" style={{ borderRadius: "12px", marginLeft: "-55px", marginRight: "30px" }} />
-
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
 
 
-                            { !Nam ?
+                            {!Nam ?
                                 <Nav className="me-auto">
                                     <Nav defaultActiveKey="/home" as="ul">
                                         <Nav.Item as="li">
-                                            <Nav.Link ><Link to="/registration"><FontAwesomeIcon icon={faUser} style={{ color: "blue", fontSize: "20px", marginLeft: "20px", textDecoration: "none" }} />Registration</Link></Nav.Link>
+                                            <Nav.Link ><Link to="/adduser"><FontAwesomeIcon icon={faUser} style={{ color: "blue", fontSize: "20px", marginLeft: "20px", textDecoration: "none" }} />Registration</Link></Nav.Link>
                                         </Nav.Item>
                                     </Nav>
                                     <Nav defaultActiveKey="/home" as="ul">
                                         <Nav.Item as="li">
-                                            <Nav.Link ><Link to="/login"><FontAwesomeIcon icon={faSignIn} style={{ color: "blue", fontSize: "20px", marginLeft: "20px" }} />Login</Link></Nav.Link>
+                                            <Nav.Link  ><Link  to="/login"><FontAwesomeIcon icon={faSignIn} style={{ color: "blue", fontSize: "20px", marginLeft: "20px" }} />Login</Link></Nav.Link>
                                         </Nav.Item>
                                     </Nav>
                                 </Nav>
@@ -77,8 +96,15 @@ export default class Dashboard extends Component {
                                                 </Link>
                                             )}</NavDropdown.Item> */}
                                     </NavDropdown>
+
+
+
                                 </Nav>
-                            } 
+                            }
+                            <div className="form-check form-switch form-check-reverse">
+                                <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onClick={this.handleMode} />
+                                <label className="form-check-label text-light" htmlFor="flexSwitchCheckDefault">{this.state.mode.charAt(0).toUpperCase() + this.state.mode.slice(1)}Mode</label>
+                            </div>
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>

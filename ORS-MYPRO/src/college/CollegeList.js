@@ -18,13 +18,10 @@ export default class CollegeList extends Component {
       "id": ''
     }
   }
-  async update() {
+   update() {
     const url = "http://api.sunilos.com:9080/ORSP10/College/search";
-    await axios.post(url, this.state).then((responce) => {
-      // console.log(responce.data.result.data)
-      // console.log(responce.data.result.data)
+     axios.post(url, this.state).then((responce) => {
       this.setState({ list: responce.data.result.data })
-
     })
   }
   componentDidMount() {
@@ -56,7 +53,7 @@ export default class CollegeList extends Component {
           </span>
         </form>
         <hr />
-        <Table striped bordered hover>
+        <Table id='ta' striped bordered hover >
           <thead>
             <tr>
               <td>#</td>
@@ -81,9 +78,8 @@ export default class CollegeList extends Component {
                     <td>{item.address}</td>
                     <td>{item.city}</td>
                     <td>{item.state}</td>
-                    <td><Link to={"/addcollege/" + item.id} ><FontAwesomeIcon icon={faEdit} style={{color: "blue",fontSize:"25px"}} /></Link></td>
-                    <td><button type='button' onClick={() => this.delete(item.id)}><FontAwesomeIcon icon={faTrash} style={{color: "red"}} /></button></td>
-
+                    <td><Link to={"/addcollege/" + item.id} ><FontAwesomeIcon icon={faEdit} style={{ color: "blue", fontSize: "25px" }} /></Link></td>
+                    <td><button type='button' onClick={() => this.delete(item.id)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" }} /></button></td>
                   </tr>
                 )
               })

@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-
 export default class Home extends Component {
-  
   render() {
     return (
       <div className="container-fluid">
@@ -15,15 +13,12 @@ export default class Home extends Component {
             </div>
           </div>
           <div>
-            <h1 style={{ color: "rgba(127,17,70,1)", fontFamily: "Lato, sansSerif",marginBottom: "50px" }}><em>Rays Technologies</em></h1>
+            <h1 style={{ color: "rgba(127,17,70,1)", fontFamily: "Lato, sansSerif", marginBottom: "50px" }}><em>Rays Technologies</em></h1>
           </div>
         </div>
-
         <div className="container-fluid">
-
           <div className="row">
             <div className="col-md-6 font-4">
-
               <img style={{ width: '100%', height: '400px' }} src={require("../image/main.jpg")} alt="..." />
             </div>
             <div className="col-md-6">
@@ -53,13 +48,12 @@ export default class Home extends Component {
                 comprehensive portfolio of IT.{" "}
               </p>
             </div>
-
           </div>
         </div>
         <div>
-            <h1 style={{  color: "rgba(127,17,70,1)", fontFamily: "Lato, sansSerif" }}><em>Our Recruiters</em></h1>
-          </div>
-          <h6 style={{color:"blue",textAlign:"center"}}>...<i>ooo</i>...</h6>
+          <h1 style={{ color: "rgba(127,17,70,1)", fontFamily: "Lato, sansSerif" }}><em>Our Recruiters</em></h1>
+        </div>
+        <h6 style={{ color: "blue", textAlign: "center" }}>...<i>ooo</i>...</h6>
       </div>
     );
   }

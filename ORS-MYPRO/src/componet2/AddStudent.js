@@ -59,7 +59,7 @@ class AddStudent extends Component {
   }
   valid() {
     if (this.state.toggle) {
-      this.props.showAlert("StudentInfo Already exists", "info")
+      this.props.showAlert("StudentInfo Already exists", "danger")
     } else { return true }
   }
   submit(event) {
@@ -76,7 +76,7 @@ class AddStudent extends Component {
         if (response.data.result.inputerror) {
           this.setState({ inputerror: response.data.result.inputerror })
         } else {
-          this.props.showAlert("Student id loaded successfully", "success")
+          this.props.showAlert("StudentId save successfully", "success")
           this.setState({ toggle: true })
         }
       })
